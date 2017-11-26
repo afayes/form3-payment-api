@@ -36,7 +36,7 @@ PaymentControllerIT {
 	}
 
 	@Test
-	public void test_create_or_update_payment_when_payment_does_not_exist_returns_201_with_payment() {
+	public void test_put_payment_when_payment_does_not_exist_returns_201_with_payment() {
 		Payment paymentToCreate = new Payment();
 		paymentToCreate.setId(UUID.randomUUID());
 		ResponseEntity<Payment> response = template.exchange(baseUrl +  "/"+ paymentToCreate.getId(), HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), Payment.class);
@@ -46,7 +46,7 @@ PaymentControllerIT {
 	}
 
     @Test
-    public void test_create_or_update_payment_when_payment_exists_returns_200_with_payment() {
+    public void test_put_payment_when_payment_exists_returns_200_with_payment() {
         Payment paymentToCreate = new Payment();
         paymentToCreate.setId(UUID.randomUUID());
 
