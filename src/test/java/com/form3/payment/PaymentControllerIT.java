@@ -45,4 +45,17 @@ PaymentControllerIT {
 		assertEquals("payment do not match", paymentToCreate, response.getBody());
 	}
 
+    @Test
+    public void test_create_or_update_payment_when_payment_exists_returns_200_with_payment() {
+        Payment paymentToCreate = new Payment();
+        paymentToCreate.setId(UUID.randomUUID());
+
+        template.exchange(baseUrl +  "/"+ paymentToCreate.getId(), HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), Payment.class);
+
+        ResponseEntity<Payment> response = template.exchange(baseUrl +  "/"+ paymentToCreate.getId(), HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), Payment.class);
+        // todo use assert4j
+        assertEquals("Status does not match", HttpStatus.OK, response.getStatusCode());
+        assertEquals("payment do not match", paymentToCreate, response.getBody());
+    }
+
 }
