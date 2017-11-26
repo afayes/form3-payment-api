@@ -33,6 +33,11 @@ public class PaymentController {
     @ResponseBody
     public ResponseEntity<Payment> createOrUpdatePayment(@PathVariable("paymentId") final UUID paymentId, @RequestBody final Payment payment) {
         payment.setId(paymentId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(paymentService.create(payment));
+        boolean paymentExists = paymentService.paymentExists(paymentId);
+
+        Payment paymentPersisted = paymentService.createOrUpdate(payment);
+        HttpStatus status = paymentExists ? HttpStatus.OK : HttpStatus.CREATED;
+
+        return ResponseEntity.status(status).body(paymentPersisted);
     }
 }

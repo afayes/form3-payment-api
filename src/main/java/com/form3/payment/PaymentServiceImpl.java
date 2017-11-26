@@ -1,7 +1,8 @@
 package com.form3.payment;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -12,15 +13,20 @@ import org.springframework.stereotype.Service;
 public class PaymentServiceImpl implements PaymentService {
 
     // todo replace with db
-    private Set<Payment> payments;
+    private Map<UUID, Payment> payments;
 
     public PaymentServiceImpl() {
-        this.payments = new HashSet<>();
+        this.payments = new HashMap<>();
     }
 
     @Override
-    public Payment create(final Payment payment) {
-        payments.add(payment);
+    public boolean paymentExists(final UUID paymentId) {
+        return payments.containsKey(paymentId);
+    }
+
+    @Override
+    public Payment createOrUpdate(final Payment payment) {
+        payments.put(payment.getId(), payment);
 
         return payment;
     }
