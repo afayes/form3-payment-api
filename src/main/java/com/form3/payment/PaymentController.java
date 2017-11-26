@@ -22,14 +22,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = Application.VERSION + PaymentController.URL, produces = MEDIA_TYPE_HAL_JSON_VALUE)
 public class PaymentController {
 
+    public static final String MEDIA_TYPE_HAL_JSON_VALUE = "application/hal+json";
+
     public static final String URL = "/payments";
 
-    public static final String MEDIA_TYPE_HAL_JSON_VALUE = "application/hal+json";
+    public static final String URL_PAYMENT_RESOURCE = "/{paymentId}";
 
     @Inject
     private PaymentService paymentService;
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/{paymentId}")
+    @RequestMapping(method = RequestMethod.PUT, value = URL_PAYMENT_RESOURCE)
     @ResponseBody
     public ResponseEntity<Payment> createOrUpdatePayment(@PathVariable("paymentId") final UUID paymentId, @RequestBody final Payment payment) {
         payment.setId(paymentId);

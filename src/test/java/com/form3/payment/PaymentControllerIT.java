@@ -39,7 +39,8 @@ PaymentControllerIT {
 	public void test_put_payment_when_payment_does_not_exist_returns_201_with_payment() {
 		Payment paymentToCreate = new Payment();
 		paymentToCreate.setId(UUID.randomUUID());
-		ResponseEntity<Payment> response = template.exchange(baseUrl +  "/"+ paymentToCreate.getId(), HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), Payment.class);
+		ResponseEntity<Payment> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), Payment.class,
+				paymentToCreate.getId());
 		// todo use assert4j
 		assertEquals("Status does not match", HttpStatus.CREATED, response.getStatusCode());
 		assertEquals("payment do not match", paymentToCreate, response.getBody());
@@ -50,9 +51,10 @@ PaymentControllerIT {
         Payment paymentToCreate = new Payment();
         paymentToCreate.setId(UUID.randomUUID());
 
-        template.exchange(baseUrl +  "/"+ paymentToCreate.getId(), HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), Payment.class);
+        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), Payment.class, paymentToCreate.getId());
 
-        ResponseEntity<Payment> response = template.exchange(baseUrl +  "/"+ paymentToCreate.getId(), HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), Payment.class);
+        ResponseEntity<Payment> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), Payment.class,
+				paymentToCreate.getId());
         // todo use assert4j
         assertEquals("Status does not match", HttpStatus.OK, response.getStatusCode());
         assertEquals("payment do not match", paymentToCreate, response.getBody());
