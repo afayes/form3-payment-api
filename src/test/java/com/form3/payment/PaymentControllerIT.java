@@ -1,5 +1,6 @@
 package com.form3.payment;
 
+import static com.form3.payment.PaymentResourceAssembler.REL_CREATE_OR_UPDATE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -32,12 +33,7 @@ PaymentControllerIT {
 
 	private String baseUrl;
 
-	// todo move constants to implementation class
     private static final String REL_SELF = "self";
-
-    private static final String REL_CREATE_OR_UPDATE = "createOrUpdate";
-
-    private static final String REL_DELETE = "delete";
 
     @Before
 	public void setUp() throws Exception {
@@ -142,11 +138,11 @@ PaymentControllerIT {
 
     private List<ResourceLink> getPaymentResourceLinks(final UUID paymentId) {
 	    List<ResourceLink> links = new ArrayList<>();
-	    // todo replace strings with constant
-        String resourceUrl = baseUrl + paymentId;
+
+        String resourceUrl = baseUrl + "/" + paymentId;
         links.add(new ResourceLink(REL_SELF, resourceUrl));
         links.add(new ResourceLink(REL_CREATE_OR_UPDATE, resourceUrl));
-	    links.add(new ResourceLink(REL_DELETE, resourceUrl));
+        // links.add(new ResourceLink(REL_DELETE, resourceUrl));
 
 	    return links;
     }

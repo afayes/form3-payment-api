@@ -31,15 +31,19 @@ public class PaymentController {
     @Inject
     private PaymentService paymentService;
 
+    @Inject
+    private PaymentResourceAssembler paymentResourceAssembler;
+
     @RequestMapping(method = RequestMethod.PUT, value = URL_PAYMENT_RESOURCE)
     @ResponseBody
-    public ResponseEntity<Payment> createOrUpdatePayment(@PathVariable("paymentId") final UUID paymentId, @RequestBody final Payment payment) {
+    public ResponseEntity<PaymentResource> createOrUpdatePayment(@PathVariable("paymentId") final UUID paymentId, @RequestBody final Payment payment) {
         payment.setId(paymentId);
         boolean paymentExists = paymentService.paymentExists(paymentId);
 
         Payment paymentPersisted = paymentService.createOrUpdate(payment);
         HttpStatus status = paymentExists ? HttpStatus.OK : HttpStatus.CREATED;
 
-        return ResponseEntity.status(status).body(paymentPersisted);
+        PaymentResource paymentResource = paymentResourceAssembler.toResource(paymentPersisted);
+        return ResponseEntity.status(status).body(paymentResource);
     }
 }
