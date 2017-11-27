@@ -49,8 +49,10 @@ PaymentControllerIT {
 	public void test_put_payment_when_payment_does_not_exist_returns_201_with_payment_resource() {
 		Payment paymentToCreate = new Payment();
 		paymentToCreate.setId(UUID.randomUUID());
-		ResponseEntity<PaymentResourceResponse> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate),
-				PaymentResourceResponse.class, paymentToCreate.getId());
+
+        ResponseEntity<PaymentResourceResponse> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate),
+                PaymentResourceResponse.class, paymentToCreate.getId());
+
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         PaymentResourceResponse paymentResourceResponse = response.getBody();
@@ -77,6 +79,14 @@ PaymentControllerIT {
 
     private static class PaymentResourceResponse extends Payment {
 	    private List<ResourceLink> links;
+
+        public List<ResourceLink> getLinks() {
+            return links;
+        }
+
+        public void setLinks(final List<ResourceLink> links) {
+            this.links = links;
+        }
     }
 
     private static class ResourceLink {
@@ -89,6 +99,43 @@ PaymentControllerIT {
 
         public ResourceLink(final String rel, final String href) {
             this.rel = rel;
+            this.href = href;
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o)
+                return true;
+            if (!(o instanceof ResourceLink))
+                return false;
+
+            final ResourceLink that = (ResourceLink) o;
+
+            if (!getRel().equals(that.getRel()))
+                return false;
+            return getHref().equals(that.getHref());
+        }
+
+        @Override
+        public int hashCode() {
+            int result = getRel().hashCode();
+            result = 31 * result + getHref().hashCode();
+            return result;
+        }
+
+        public String getRel() {
+            return rel;
+        }
+
+        public void setRel(final String rel) {
+            this.rel = rel;
+        }
+
+        public String getHref() {
+            return href;
+        }
+
+        public void setHref(final String href) {
             this.href = href;
         }
     }
