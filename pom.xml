@@ -85,7 +85,7 @@
                         <configuration>
                             <images>
                                 <image>
-                                    <name>arungupta/couchbase-server</name>
+                                    <name>afayes/couchbase-server</name>
                                     <alias>it-database</alias>
                                     <run>
                                         <ports>
