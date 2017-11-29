@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +27,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class
 PaymentControllerIT {
 
-
     private TestRestTemplate template;
 
 	@Value("${local.server.port}")
@@ -34,6 +35,9 @@ PaymentControllerIT {
 	private String baseUrl;
 
     private static final String REL_SELF = "self";
+
+    @Inject
+    private PaymentRepository paymentRepository;
 
     @Before
 	public void setUp() throws Exception {

@@ -2,11 +2,16 @@ package com.form3.payment;
 
 import java.util.UUID;
 
+import com.couchbase.client.java.repository.annotation.Id;
+import org.springframework.data.couchbase.core.mapping.Document;
+
 /**
  * todo add comments.
  */
+@Document
 public class Payment {
 
+    @Id
     private UUID id;
 
     public UUID getId() {
