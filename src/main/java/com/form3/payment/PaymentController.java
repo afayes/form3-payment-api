@@ -36,11 +36,11 @@ public class PaymentController {
 
     @RequestMapping(method = RequestMethod.PUT, value = URL_PAYMENT_RESOURCE)
     @ResponseBody
-    public ResponseEntity<PaymentResource> createOrUpdatePayment(@PathVariable("paymentId") final UUID paymentId, @RequestBody final Payment payment) {
+    public ResponseEntity<PaymentResource> savePayment(@PathVariable("paymentId") final UUID paymentId, @RequestBody final Payment payment) {
         payment.setId(paymentId);
         boolean paymentExists = paymentService.paymentExists(paymentId);
 
-        Payment paymentPersisted = paymentService.createOrUpdate(payment);
+        Payment paymentPersisted = paymentService.savePayment(payment);
         HttpStatus status = paymentExists ? HttpStatus.OK : HttpStatus.CREATED;
 
         PaymentResource paymentResource = paymentResourceAssembler.toResource(paymentPersisted);

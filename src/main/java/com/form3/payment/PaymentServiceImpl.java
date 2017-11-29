@@ -20,7 +20,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment createOrUpdate(final Payment payment) {
+    public Payment savePayment(final Payment payment) {
         return paymentRepository.save(payment);
     }
 }

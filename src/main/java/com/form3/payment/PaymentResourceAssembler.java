@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PaymentResourceAssembler extends ResourceAssemblerSupport<Payment, PaymentResource> {
 
-    public static final String REL_CREATE_OR_UPDATE = "createOrUpdate";
+    public static final String REL_SAVE = "savePayment";
 
     public PaymentResourceAssembler() {
         super(PaymentController.class, PaymentResource.class);
@@ -25,7 +25,7 @@ public class PaymentResourceAssembler extends ResourceAssemblerSupport<Payment, 
     @Override
     public PaymentResource toResource(final Payment payment) {
         List<Link> links = new ArrayList<>();
-        links.add(linkTo(methodOn(PaymentController.class).createOrUpdatePayment(payment.getId(), payment)).withRel(REL_CREATE_OR_UPDATE));
+        links.add(linkTo(methodOn(PaymentController.class).savePayment(payment.getId(), payment)).withRel(REL_SAVE));
 
         PaymentResource resource = createResourceWithId(payment.getId(), payment);
         resource.add(links);

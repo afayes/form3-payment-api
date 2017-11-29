@@ -19,5 +19,5 @@ public interface PaymentService {
     /**
      * todo add comments.
      */
-    Payment createOrUpdate(final Payment payment);
+    Payment savePayment(final Payment payment);
 }
