@@ -1,6 +1,6 @@
 package com.form3.payment;
 
-import static com.form3.payment.PaymentResourceAssembler.REL_CREATE_OR_UPDATE;
+import static com.form3.payment.PaymentResourceAssembler.REL_SAVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -46,7 +46,7 @@ PaymentControllerIT {
 	}
 
 	@Test
-	public void test_put_payment_when_payment_does_not_exist_returns_201_with_payment_resource() {
+	public void test_save_payment_when_payment_does_not_exist_returns_201_with_payment_resource() {
 		Payment paymentToCreate = new Payment();
 		paymentToCreate.setId(UUID.randomUUID());
 
@@ -62,7 +62,7 @@ PaymentControllerIT {
 	}
 
     @Test
-    public void test_put_payment_when_payment_exists_returns_200_with_payment_resource() {
+    public void test_save_payment_when_payment_exists_returns_200_with_payment_resource() {
         Payment paymentToCreate = new Payment();
         paymentToCreate.setId(UUID.randomUUID());
 
@@ -145,7 +145,7 @@ PaymentControllerIT {
 
         String resourceUrl = baseUrl + "/" + paymentId;
         links.add(new ResourceLink(REL_SELF, resourceUrl));
-        links.add(new ResourceLink(REL_CREATE_OR_UPDATE, resourceUrl));
+        links.add(new ResourceLink(REL_SAVE, resourceUrl));
         // links.add(new ResourceLink(REL_DELETE, resourceUrl));
 
 	    return links;
