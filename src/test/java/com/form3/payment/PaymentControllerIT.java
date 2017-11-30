@@ -115,6 +115,14 @@ PaymentControllerIT {
         assertThat(response.getBody()).isNull();
     }
 
+    @Test
+    public void test_delete_payment_when_payment_does_not_exist_returns_204() {
+        UUID nonExistentPaymetId = UUID.randomUUID();
+        ResponseEntity<?> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.DELETE, null, Object.class, nonExistentPaymetId);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getBody()).isNull();
+    }
+
     private static class PaymentResourceResponse extends Payment {
 	    private Map<String, Map<String, String>> _links;
 
