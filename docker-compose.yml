@@ -1,0 +1,25 @@
+version: '2'
+services:
+  couchbase-server:
+    image: afayes/couchbase-server
+    container_name: couchbase-server
+    ports:
+      - "8091:8091"
+      - "8092:8092"
+      - "8093:8093"
+      - "8094:8094"
+      - "11207:11207"
+      - "11210:11210"
+      - "11211:11211"
+      - "18091:18091"
+      - "18092:18092"
+      - "18093:18093"
+  payment-api:
+      image: afayes/payment-api
+      container_name: payment-api
+      ports:
+        - "8080:8080"
+      environment:
+        COUCHBASE_HOSTS: couchbase-server
+      depends_on:
+        - couchbase-server
