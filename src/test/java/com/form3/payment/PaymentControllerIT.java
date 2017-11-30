@@ -4,8 +4,8 @@ import static com.form3.payment.PaymentResourceAssembler.REL_SAVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -26,6 +26,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment=RANDOM_PORT )
 public class
 PaymentControllerIT {
+
+    private static final String PROPERTY_HREF = "href";
+
+    private static final String PROPERTY_LINKS = "_links";
 
     private TestRestTemplate template;
 
@@ -53,11 +57,11 @@ PaymentControllerIT {
         ResponseEntity<PaymentResourceResponse> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate),
                 PaymentResourceResponse.class, paymentToCreate.getId());
 
-
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         PaymentResourceResponse paymentResourceResponse = response.getBody();
-        assertThat(paymentResourceResponse).isEqualToIgnoringGivenFields(paymentToCreate, "links");
-        assertThat(paymentResourceResponse.links).isEqualTo(getPaymentResourceLinks(paymentToCreate.getId()));
+        assertThat(paymentResourceResponse).isEqualToIgnoringGivenFields(paymentToCreate, PROPERTY_LINKS);
+
+        assertThat(paymentResourceResponse._links).isEqualTo(getPaymentResourceLinks(paymentToCreate.getId()));
 
 	}
 
@@ -73,80 +77,35 @@ PaymentControllerIT {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         PaymentResourceResponse paymentResourceResponse = response.getBody();
-        assertThat(paymentResourceResponse).isEqualToIgnoringGivenFields(paymentToCreate, "links");
-        assertThat(paymentResourceResponse.links).isEqualTo(getPaymentResourceLinks(paymentToCreate.getId()));
+        assertThat(paymentResourceResponse).isEqualToIgnoringGivenFields(paymentToCreate, PROPERTY_LINKS);
+        assertThat(paymentResourceResponse._links).isEqualTo(getPaymentResourceLinks(paymentToCreate.getId()));
     }
 
     private static class PaymentResourceResponse extends Payment {
-	    private List<ResourceLink> links;
+	    private Map<String, Map<String, String>> _links;
 
-        public List<ResourceLink> getLinks() {
-            return links;
+        public Map<String, Map<String, String>> get_links() {
+            return _links;
         }
 
-        public void setLinks(final List<ResourceLink> links) {
-            this.links = links;
-        }
-    }
-
-    private static class ResourceLink {
-	    private String rel;
-
-	    private String href;
-
-        public ResourceLink() {
-        }
-
-        public ResourceLink(final String rel, final String href) {
-            this.rel = rel;
-            this.href = href;
-        }
-
-        @Override
-        public boolean equals(final Object o) {
-            if (this == o)
-                return true;
-            if (!(o instanceof ResourceLink))
-                return false;
-
-            final ResourceLink that = (ResourceLink) o;
-
-            if (!getRel().equals(that.getRel()))
-                return false;
-            return getHref().equals(that.getHref());
-        }
-
-        @Override
-        public int hashCode() {
-            int result = getRel().hashCode();
-            result = 31 * result + getHref().hashCode();
-            return result;
-        }
-
-        public String getRel() {
-            return rel;
-        }
-
-        public void setRel(final String rel) {
-            this.rel = rel;
-        }
-
-        public String getHref() {
-            return href;
-        }
-
-        public void setHref(final String href) {
-            this.href = href;
+        public void set_links(final Map<String, Map<String, String>> _links) {
+            this._links = _links;
         }
     }
 
-    private List<ResourceLink> getPaymentResourceLinks(final UUID paymentId) {
-	    List<ResourceLink> links = new ArrayList<>();
+    private Map<String, Map<String, String>> getPaymentResourceLinks(final UUID paymentId) {
+        final String resourceUrl = baseUrl + "/" + paymentId;
 
-        String resourceUrl = baseUrl + "/" + paymentId;
-        links.add(new ResourceLink(REL_SELF, resourceUrl));
-        links.add(new ResourceLink(REL_SAVE, resourceUrl));
-        // links.add(new ResourceLink(REL_DELETE, resourceUrl));
+        final Map<String, Map<String, String>> links = new HashMap<>();
+
+        final Map<String, String> selfLink = new HashMap<>();
+        selfLink.put(PROPERTY_HREF, resourceUrl);
+
+        final Map<String, String> saveLink = new HashMap<>();
+        saveLink.put(PROPERTY_HREF, resourceUrl);
+
+        links.put(REL_SELF, selfLink);
+        links.put(REL_SAVE, saveLink);
 
 	    return links;
     }
