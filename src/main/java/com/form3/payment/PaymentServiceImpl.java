@@ -29,4 +29,9 @@ public class PaymentServiceImpl implements PaymentService {
     public Optional<Payment> getPayment(final UUID paymentId) {
         return Optional.ofNullable(paymentRepository.findOne(paymentId));
     }
+
+    @Override
+    public void deletePayment(final UUID paymentId) {
+        paymentRepository.delete(paymentId);
+    }
 }

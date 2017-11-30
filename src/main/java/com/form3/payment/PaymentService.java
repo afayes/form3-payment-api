@@ -23,4 +23,6 @@ public interface PaymentService {
     Payment savePayment(final Payment payment);
 
     Optional<Payment> getPayment(final UUID paymentId);
+
+    void deletePayment(final UUID paymentId);
 }

@@ -59,4 +59,11 @@ public class PaymentController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @RequestMapping(method = RequestMethod.DELETE, path = URL_PAYMENT_RESOURCE)
+    @ResponseBody
+    public ResponseEntity<PaymentResource> deletePayment(@PathVariable("paymentId") final UUID paymentId) {
+        paymentService.deletePayment(paymentId);
+        return ResponseEntity.noContent().build();
+    }
 }
