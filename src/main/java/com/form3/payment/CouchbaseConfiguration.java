@@ -2,6 +2,9 @@ package com.form3.payment;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
@@ -12,6 +15,9 @@ import org.springframework.data.couchbase.repository.support.IndexManager;
 @EnableCouchbaseRepositories(basePackages = "com.form3.payment")
 public class CouchbaseConfiguration extends AbstractCouchbaseConfiguration {
 
+    @Inject
+    private CouchbaseHealthCheckService couchbaseHealthCheckService;
+
     @Value("#{'${couchbase.hosts}'.split(',')}")
     private List<String> bootstrapHosts;
 
@@ -20,6 +26,21 @@ public class CouchbaseConfiguration extends AbstractCouchbaseConfiguration {
 
     @Value("${couchbase.password}")
     private String password;
+
+    @Value("${couchbase.bucketHealthCheckRetry:10}")
+    private int bucketHealthCheckRetry;
+
+    @Value("${couchbase.bucketHealthCheckInterval:5000}")
+    private int bucketHealthCheckInterval;
+
+    @PostConstruct
+    public void init() throws InterruptedException {
+        // bucket must be ready for Spring Data to bootstrap indexes and views, otherwise Spring will throw an exception
+        boolean healthy = couchbaseHealthCheckService.bucketIsHealthy(bucket, bucketHealthCheckRetry, bucketHealthCheckInterval);
+        if (!healthy) {
+            throw new CouchbaseConfigurationException("Bucket " + bucket + " is not healthy");
+        }
+    }
 
     @Override
     protected List<String> getBootstrapHosts() {

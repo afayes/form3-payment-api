@@ -18,10 +18,7 @@ public class Application {
 
 	public static final String VERSION = "/api/v1" ;
 
-	public static void main(String[] args) throws InterruptedException {
-		// wait for couchbase to be ready
-		// todo - a better way is to do a health check via a couchbase rest endpoint
-		Thread.sleep(20000);
+	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
