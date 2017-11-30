@@ -1,5 +1,6 @@
 package com.form3.payment;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment getPayment(final UUID paymentId) {
-        return paymentRepository.findOne(paymentId);
+    public Optional<Payment> getPayment(final UUID paymentId) {
+        return Optional.ofNullable(paymentRepository.findOne(paymentId));
     }
 }

@@ -1,7 +1,6 @@
 package com.form3.payment;
 
 import static com.form3.payment.PaymentResourceAssembler.REL_SAVE;
-import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -22,7 +21,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.HttpClientErrorException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=RANDOM_PORT )
@@ -101,13 +99,8 @@ PaymentControllerIT {
     @Test
     public void test_get_payment_when_payment_does_not_exist_returns_404() {
         UUID nonExistentPaymentId = UUID.randomUUID();
-
-        try {
-            ResponseEntity<PaymentResourceResponse> response = template.getForEntity(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, PaymentResourceResponse.class, nonExistentPaymentId);
-            fail("Expected HttpClientErrorException to be thrown with status 404");
-        } catch (HttpClientErrorException exception) {
-            assertThat(exception.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        }
+        ResponseEntity<PaymentResourceResponse> response = template.getForEntity(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, PaymentResourceResponse.class, nonExistentPaymentId);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     private static class PaymentResourceResponse extends Payment {

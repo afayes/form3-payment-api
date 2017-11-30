@@ -2,6 +2,7 @@ package com.form3.payment;
 
 import static com.form3.payment.PaymentController.MEDIA_TYPE_HAL_JSON_VALUE;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -50,9 +51,12 @@ public class PaymentController {
     @RequestMapping(value = URL_PAYMENT_RESOURCE)
     @ResponseBody
     public ResponseEntity<PaymentResource> getPayment(@PathVariable("paymentId") final UUID paymentId) {
-        Payment payment = paymentService.getPayment(paymentId);
-
-        PaymentResource paymentResource = paymentResourceAssembler.toResource(payment);
-        return ResponseEntity.ok().body(paymentResource);
+        Optional<Payment> payment = paymentService.getPayment(paymentId);
+        if (payment.isPresent()) {
+            PaymentResource paymentResource = paymentResourceAssembler.toResource(payment.get());
+            return ResponseEntity.ok().body(paymentResource);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
