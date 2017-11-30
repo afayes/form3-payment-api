@@ -103,6 +103,18 @@ PaymentControllerIT {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
+    @Test
+    public void test_delete_payment_when_payment_exists_returns_204() {
+        Payment paymentToCreate = new Payment();
+        paymentToCreate.setId(UUID.randomUUID());
+
+        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponse.class, paymentToCreate.getId());
+
+        ResponseEntity<?> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.DELETE, null, Object.class, paymentToCreate.getId());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getBody()).isNull();
+    }
+
     private static class PaymentResourceResponse extends Payment {
 	    private Map<String, Map<String, String>> _links;
 
