@@ -18,6 +18,8 @@ public class PaymentResourceAssembler extends ResourceAssemblerSupport<Payment, 
 
     public static final String REL_SAVE = "savePayment";
 
+    public static final String REL_DELETE = "deletePayment";
+
     public PaymentResourceAssembler() {
         super(PaymentController.class, PaymentResource.class);
     }
@@ -26,6 +28,7 @@ public class PaymentResourceAssembler extends ResourceAssemblerSupport<Payment, 
     public PaymentResource toResource(final Payment payment) {
         List<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(PaymentController.class).savePayment(payment.getId(), payment)).withRel(REL_SAVE));
+        links.add(linkTo(methodOn(PaymentController.class).deletePayment(payment.getId())).withRel(REL_DELETE));
 
         PaymentResource resource = createResourceWithId(payment.getId(), payment);
         resource.add(links);

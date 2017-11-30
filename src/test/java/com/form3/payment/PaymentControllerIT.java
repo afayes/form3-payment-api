@@ -1,5 +1,6 @@
 package com.form3.payment;
 
+import static com.form3.payment.PaymentResourceAssembler.REL_DELETE;
 import static com.form3.payment.PaymentResourceAssembler.REL_SAVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -30,8 +31,6 @@ PaymentControllerIT {
     private static final String PROPERTY_HREF = "href";
 
     private static final String PROPERTY_LINKS = "_links";
-
-    private static final String REL_DELETE = "deletePayment";
 
     private TestRestTemplate template;
 
