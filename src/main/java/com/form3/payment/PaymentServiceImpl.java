@@ -23,4 +23,9 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment savePayment(final Payment payment) {
         return paymentRepository.save(payment);
     }
+
+    @Override
+    public Payment getPayment(final UUID paymentId) {
+        return paymentRepository.findOne(paymentId);
+    }
 }

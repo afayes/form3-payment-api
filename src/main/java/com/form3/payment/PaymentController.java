@@ -46,4 +46,13 @@ public class PaymentController {
         PaymentResource paymentResource = paymentResourceAssembler.toResource(paymentPersisted);
         return ResponseEntity.status(status).body(paymentResource);
     }
+
+    @RequestMapping(value = URL_PAYMENT_RESOURCE)
+    @ResponseBody
+    public ResponseEntity<PaymentResource> getPayment(@PathVariable("paymentId") final UUID paymentId) {
+        Payment payment = paymentService.getPayment(paymentId);
+
+        PaymentResource paymentResource = paymentResourceAssembler.toResource(payment);
+        return ResponseEntity.ok().body(paymentResource);
+    }
 }

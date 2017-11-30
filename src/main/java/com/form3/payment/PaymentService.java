@@ -20,4 +20,6 @@ public interface PaymentService {
      * todo add comments.
      */
     Payment savePayment(final Payment payment);
+
+    Payment getPayment(final UUID paymentId);
 }
