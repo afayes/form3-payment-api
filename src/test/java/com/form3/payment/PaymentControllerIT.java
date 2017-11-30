@@ -31,6 +31,8 @@ PaymentControllerIT {
 
     private static final String PROPERTY_LINKS = "_links";
 
+    private static final String REL_DELETE = "deletePayment";
+
     private TestRestTemplate template;
 
 	@Value("${local.server.port}")
@@ -140,14 +142,12 @@ PaymentControllerIT {
 
         final Map<String, Map<String, String>> links = new HashMap<>();
 
-        final Map<String, String> selfLink = new HashMap<>();
-        selfLink.put(PROPERTY_HREF, resourceUrl);
+        final Map<String, String> resourceLink = new HashMap<>();
+        resourceLink.put(PROPERTY_HREF, resourceUrl);
 
-        final Map<String, String> saveLink = new HashMap<>();
-        saveLink.put(PROPERTY_HREF, resourceUrl);
-
-        links.put(REL_SELF, selfLink);
-        links.put(REL_SAVE, saveLink);
+        links.put(REL_SELF, resourceLink);
+        links.put(REL_SAVE, resourceLink);
+        links.put(REL_DELETE, resourceLink);
 
 	    return links;
     }
