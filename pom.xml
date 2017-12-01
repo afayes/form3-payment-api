@@ -25,6 +25,7 @@
         <springfox.version>2.6.0</springfox.version>
         <assertj.version>3.5.2</assertj.version>
         <guava.version>23.5-jre</guava.version>
+        <commons-io.version>2.6</commons-io.version>
     </properties>
 
     <dependencies>
@@ -81,6 +82,12 @@
             <version>${guava.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
+
     </dependencies>
 
 
@@ -113,6 +120,7 @@
                                             <port>8092:8092</port>
                                             <port>8093:8093</port>
                                             <port>8094:8094</port>
+                                            <port>9110:9110</port>
                                             <port>11207:11207</port>
                                             <port>11210:11210</port>
                                             <port>11211:11211</port>
