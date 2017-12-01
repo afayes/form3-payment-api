@@ -1,13 +1,8 @@
 package com.form3.payment.model;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import com.couchbase.client.java.repository.annotation.Id;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -43,8 +38,35 @@ public class Payment {
     @JsonProperty("attributes")
     private Attributes attributes;
 
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof Payment))
+            return false;
+
+        final Payment payment = (Payment) o;
+
+        if (getVersion() != payment.getVersion())
+            return false;
+        if (getId() != null ? !getId().equals(payment.getId()) : payment.getId() != null)
+            return false;
+        if (getType() != null ? !getType().equals(payment.getType()) : payment.getType() != null)
+            return false;
+        if (getOrganisationId() != null ? !getOrganisationId().equals(payment.getOrganisationId()) : payment.getOrganisationId() != null)
+            return false;
+        return getAttributes() != null ? getAttributes().equals(payment.getAttributes()) : payment.getAttributes() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+        result = 31 * result + getVersion();
+        result = 31 * result + (getOrganisationId() != null ? getOrganisationId().hashCode() : 0);
+        result = 31 * result + (getAttributes() != null ? getAttributes().hashCode() : 0);
+        return result;
+    }
 
     @JsonProperty("id")
     public UUID getId() {
@@ -95,15 +117,4 @@ public class Payment {
     public void setAttributes(Attributes attributes) {
         this.attributes = attributes;
     }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
 }

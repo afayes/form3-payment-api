@@ -26,6 +26,30 @@ public class SenderCharge {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof SenderCharge))
+            return false;
+
+        final SenderCharge that = (SenderCharge) o;
+
+        if (getAmount() != null ? !getAmount().equals(that.getAmount()) : that.getAmount() != null)
+            return false;
+        if (getCurrency() != null ? !getCurrency().equals(that.getCurrency()) : that.getCurrency() != null)
+            return false;
+        return getAdditionalProperties() != null ? getAdditionalProperties().equals(that.getAdditionalProperties()) : that.getAdditionalProperties() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getAmount() != null ? getAmount().hashCode() : 0;
+        result = 31 * result + (getCurrency() != null ? getCurrency().hashCode() : 0);
+        result = 31 * result + (getAdditionalProperties() != null ? getAdditionalProperties().hashCode() : 0);
+        return result;
+    }
+
     @JsonProperty("amount")
     public String getAmount() {
         return amount;

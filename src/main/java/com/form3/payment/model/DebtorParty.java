@@ -1,11 +1,5 @@
 package com.form3.payment.model;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -43,8 +37,41 @@ public class DebtorParty {
     @JsonProperty("name")
     private String name;
 
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof DebtorParty))
+            return false;
+
+        final DebtorParty that = (DebtorParty) o;
+
+        if (getAccountName() != null ? !getAccountName().equals(that.getAccountName()) : that.getAccountName() != null)
+            return false;
+        if (getAccountNumber() != null ? !getAccountNumber().equals(that.getAccountNumber()) : that.getAccountNumber() != null)
+            return false;
+        if (getAccountNumberCode() != null ? !getAccountNumberCode().equals(that.getAccountNumberCode()) : that.getAccountNumberCode() != null)
+            return false;
+        if (getAddress() != null ? !getAddress().equals(that.getAddress()) : that.getAddress() != null)
+            return false;
+        if (getBankId() != null ? !getBankId().equals(that.getBankId()) : that.getBankId() != null)
+            return false;
+        if (getBankIdCode() != null ? !getBankIdCode().equals(that.getBankIdCode()) : that.getBankIdCode() != null)
+            return false;
+        return getName() != null ? getName().equals(that.getName()) : that.getName() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getAccountName() != null ? getAccountName().hashCode() : 0;
+        result = 31 * result + (getAccountNumber() != null ? getAccountNumber().hashCode() : 0);
+        result = 31 * result + (getAccountNumberCode() != null ? getAccountNumberCode().hashCode() : 0);
+        result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
+        result = 31 * result + (getBankId() != null ? getBankId().hashCode() : 0);
+        result = 31 * result + (getBankIdCode() != null ? getBankIdCode().hashCode() : 0);
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        return result;
+    }
 
     @JsonProperty("account_name")
     public String getAccountName() {
@@ -115,15 +142,4 @@ public class DebtorParty {
     public void setName(String name) {
         this.name = name;
     }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
 }

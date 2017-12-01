@@ -31,6 +31,36 @@ public class Fx {
     @JsonProperty("original_currency")
     private String originalCurrency;
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof Fx))
+            return false;
+
+        final Fx fx = (Fx) o;
+
+        if (getContractReference() != null ? !getContractReference().equals(fx.getContractReference()) : fx.getContractReference() != null)
+            return false;
+        if (getExchangeRate() != null ? !getExchangeRate().equals(fx.getExchangeRate()) : fx.getExchangeRate() != null)
+            return false;
+        if (getOriginalAmount() != null ? !getOriginalAmount().equals(fx.getOriginalAmount()) : fx.getOriginalAmount() != null)
+            return false;
+        if (getOriginalCurrency() != null ? !getOriginalCurrency().equals(fx.getOriginalCurrency()) : fx.getOriginalCurrency() != null)
+            return false;
+        return getAdditionalProperties() != null ? getAdditionalProperties().equals(fx.getAdditionalProperties()) : fx.getAdditionalProperties() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getContractReference() != null ? getContractReference().hashCode() : 0;
+        result = 31 * result + (getExchangeRate() != null ? getExchangeRate().hashCode() : 0);
+        result = 31 * result + (getOriginalAmount() != null ? getOriginalAmount().hashCode() : 0);
+        result = 31 * result + (getOriginalCurrency() != null ? getOriginalCurrency().hashCode() : 0);
+        result = 31 * result + (getAdditionalProperties() != null ? getAdditionalProperties().hashCode() : 0);
+        return result;
+    }
+
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 

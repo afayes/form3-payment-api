@@ -30,6 +30,33 @@ public class SponsorParty {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof SponsorParty))
+            return false;
+
+        final SponsorParty that = (SponsorParty) o;
+
+        if (getAccountNumber() != null ? !getAccountNumber().equals(that.getAccountNumber()) : that.getAccountNumber() != null)
+            return false;
+        if (getBankId() != null ? !getBankId().equals(that.getBankId()) : that.getBankId() != null)
+            return false;
+        if (getBankIdCode() != null ? !getBankIdCode().equals(that.getBankIdCode()) : that.getBankIdCode() != null)
+            return false;
+        return getAdditionalProperties() != null ? getAdditionalProperties().equals(that.getAdditionalProperties()) : that.getAdditionalProperties() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getAccountNumber() != null ? getAccountNumber().hashCode() : 0;
+        result = 31 * result + (getBankId() != null ? getBankId().hashCode() : 0);
+        result = 31 * result + (getBankIdCode() != null ? getBankIdCode().hashCode() : 0);
+        result = 31 * result + (getAdditionalProperties() != null ? getAdditionalProperties().hashCode() : 0);
+        return result;
+    }
+
     @JsonProperty("account_number")
     public String getAccountNumber() {
         return accountNumber;

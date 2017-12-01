@@ -1,12 +1,7 @@
 package com.form3.payment.model;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -32,8 +27,32 @@ public class ChargesInformation {
     @JsonProperty("receiver_charges_currency")
     private String receiverChargesCurrency;
 
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof ChargesInformation))
+            return false;
+
+        final ChargesInformation that = (ChargesInformation) o;
+
+        if (getBearerCode() != null ? !getBearerCode().equals(that.getBearerCode()) : that.getBearerCode() != null)
+            return false;
+        if (getSenderCharges() != null ? !getSenderCharges().equals(that.getSenderCharges()) : that.getSenderCharges() != null)
+            return false;
+        if (getReceiverChargesAmount() != null ? !getReceiverChargesAmount().equals(that.getReceiverChargesAmount()) : that.getReceiverChargesAmount() != null)
+            return false;
+        return getReceiverChargesCurrency() != null ? getReceiverChargesCurrency().equals(that.getReceiverChargesCurrency()) : that.getReceiverChargesCurrency() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getBearerCode() != null ? getBearerCode().hashCode() : 0;
+        result = 31 * result + (getSenderCharges() != null ? getSenderCharges().hashCode() : 0);
+        result = 31 * result + (getReceiverChargesAmount() != null ? getReceiverChargesAmount().hashCode() : 0);
+        result = 31 * result + (getReceiverChargesCurrency() != null ? getReceiverChargesCurrency().hashCode() : 0);
+        return result;
+    }
 
     @JsonProperty("bearer_code")
     public String getBearerCode() {
@@ -74,15 +93,4 @@ public class ChargesInformation {
     public void setReceiverChargesCurrency(String receiverChargesCurrency) {
         this.receiverChargesCurrency = receiverChargesCurrency;
     }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
 }

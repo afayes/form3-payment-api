@@ -1,11 +1,5 @@
 package com.form3.payment.model;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -88,8 +82,71 @@ public class Attributes {
     @JsonProperty("sponsor_party")
     private SponsorParty sponsorParty;
 
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof Attributes))
+            return false;
+
+        final Attributes that = (Attributes) o;
+
+        if (getAmount() != null ? !getAmount().equals(that.getAmount()) : that.getAmount() != null)
+            return false;
+        if (getBeneficiaryParty() != null ? !getBeneficiaryParty().equals(that.getBeneficiaryParty()) : that.getBeneficiaryParty() != null)
+            return false;
+        if (getChargesInformation() != null ? !getChargesInformation().equals(that.getChargesInformation()) : that.getChargesInformation() != null)
+            return false;
+        if (getCurrency() != null ? !getCurrency().equals(that.getCurrency()) : that.getCurrency() != null)
+            return false;
+        if (getDebtorParty() != null ? !getDebtorParty().equals(that.getDebtorParty()) : that.getDebtorParty() != null)
+            return false;
+        if (getEndToEndReference() != null ? !getEndToEndReference().equals(that.getEndToEndReference()) : that.getEndToEndReference() != null)
+            return false;
+        if (getFx() != null ? !getFx().equals(that.getFx()) : that.getFx() != null)
+            return false;
+        if (getNumericReference() != null ? !getNumericReference().equals(that.getNumericReference()) : that.getNumericReference() != null)
+            return false;
+        if (getPaymentId() != null ? !getPaymentId().equals(that.getPaymentId()) : that.getPaymentId() != null)
+            return false;
+        if (getPaymentPurpose() != null ? !getPaymentPurpose().equals(that.getPaymentPurpose()) : that.getPaymentPurpose() != null)
+            return false;
+        if (getPaymentScheme() != null ? !getPaymentScheme().equals(that.getPaymentScheme()) : that.getPaymentScheme() != null)
+            return false;
+        if (getPaymentType() != null ? !getPaymentType().equals(that.getPaymentType()) : that.getPaymentType() != null)
+            return false;
+        if (getProcessingDate() != null ? !getProcessingDate().equals(that.getProcessingDate()) : that.getProcessingDate() != null)
+            return false;
+        if (getReference() != null ? !getReference().equals(that.getReference()) : that.getReference() != null)
+            return false;
+        if (getSchemePaymentSubType() != null ? !getSchemePaymentSubType().equals(that.getSchemePaymentSubType()) : that.getSchemePaymentSubType() != null)
+            return false;
+        if (getSchemePaymentType() != null ? !getSchemePaymentType().equals(that.getSchemePaymentType()) : that.getSchemePaymentType() != null)
+            return false;
+        return getSponsorParty() != null ? getSponsorParty().equals(that.getSponsorParty()) : that.getSponsorParty() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getAmount() != null ? getAmount().hashCode() : 0;
+        result = 31 * result + (getBeneficiaryParty() != null ? getBeneficiaryParty().hashCode() : 0);
+        result = 31 * result + (getChargesInformation() != null ? getChargesInformation().hashCode() : 0);
+        result = 31 * result + (getCurrency() != null ? getCurrency().hashCode() : 0);
+        result = 31 * result + (getDebtorParty() != null ? getDebtorParty().hashCode() : 0);
+        result = 31 * result + (getEndToEndReference() != null ? getEndToEndReference().hashCode() : 0);
+        result = 31 * result + (getFx() != null ? getFx().hashCode() : 0);
+        result = 31 * result + (getNumericReference() != null ? getNumericReference().hashCode() : 0);
+        result = 31 * result + (getPaymentId() != null ? getPaymentId().hashCode() : 0);
+        result = 31 * result + (getPaymentPurpose() != null ? getPaymentPurpose().hashCode() : 0);
+        result = 31 * result + (getPaymentScheme() != null ? getPaymentScheme().hashCode() : 0);
+        result = 31 * result + (getPaymentType() != null ? getPaymentType().hashCode() : 0);
+        result = 31 * result + (getProcessingDate() != null ? getProcessingDate().hashCode() : 0);
+        result = 31 * result + (getReference() != null ? getReference().hashCode() : 0);
+        result = 31 * result + (getSchemePaymentSubType() != null ? getSchemePaymentSubType().hashCode() : 0);
+        result = 31 * result + (getSchemePaymentType() != null ? getSchemePaymentType().hashCode() : 0);
+        result = 31 * result + (getSponsorParty() != null ? getSponsorParty().hashCode() : 0);
+        return result;
+    }
 
     @JsonProperty("amount")
     public String getAmount() {
@@ -260,15 +317,4 @@ public class Attributes {
     public void setSponsorParty(SponsorParty sponsorParty) {
         this.sponsorParty = sponsorParty;
     }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
 }
