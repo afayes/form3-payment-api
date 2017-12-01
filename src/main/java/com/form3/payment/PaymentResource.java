@@ -1,5 +1,6 @@
 package com.form3.payment;
 
+import com.form3.payment.model.Payment;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 

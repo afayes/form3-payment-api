@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import com.form3.payment.model.Payment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

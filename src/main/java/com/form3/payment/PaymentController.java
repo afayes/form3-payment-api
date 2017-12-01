@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import com.form3.payment.model.Payment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

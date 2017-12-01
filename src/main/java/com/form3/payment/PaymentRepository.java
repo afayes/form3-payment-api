@@ -2,6 +2,7 @@ package com.form3.payment;
 
 import java.util.UUID;
 
+import com.form3.payment.model.Payment;
 import org.springframework.data.couchbase.core.query.N1qlPrimaryIndexed;
 import org.springframework.data.couchbase.core.query.N1qlSecondaryIndexed;
 import org.springframework.data.couchbase.core.query.ViewIndexed;
