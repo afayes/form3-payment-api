@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -17,6 +18,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -122,6 +124,27 @@ PaymentControllerIT {
         ResponseEntity<?> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.DELETE, null, Object.class, nonExistentPaymetId);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         assertThat(response.getBody()).isNull();
+    }
+
+    @Test
+    public void test_get_payments_when_one_payment_exists_returns_200_with_payment_resource() {
+        Payment paymentToCreate = new Payment();
+        paymentToCreate.setId(UUID.randomUUID());
+
+        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponse.class, paymentToCreate.getId());
+
+        ParameterizedTypeReference<List<PaymentResourceResponse>> parameterizedTypeReference = new ParameterizedTypeReference<List<PaymentResourceResponse>>(){};
+
+        ResponseEntity<List<PaymentResourceResponse>> response = template.exchange(baseUrl, HttpMethod.GET, null, parameterizedTypeReference);
+
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        List<PaymentResourceResponse> paymentResources = response.getBody();
+
+        assertThat(paymentResources.size()).isEqualTo(1);
+        PaymentResourceResponse paymentResourceRetrieved = paymentResources.get(0);
+        assertThat(paymentResourceRetrieved).isEqualToIgnoringGivenFields(paymentToCreate, PROPERTY_LINKS);
+        assertThat(paymentResourceRetrieved._links).isEqualTo(getPaymentResourceLinks(paymentToCreate.getId()));
     }
 
     private static class PaymentResourceResponse extends Payment {
