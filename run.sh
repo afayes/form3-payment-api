@@ -9,7 +9,6 @@ build() {
 
 start() {
     docker-compose up -d
-    docker-compose logs -f
 }
 stop() {
     docker-compose down
@@ -18,6 +17,10 @@ stop() {
 run() {
     build
     start
+}
+
+logs() {
+    docker-compose logs -f
 }
 
 case "$1" in
@@ -33,10 +36,14 @@ case "$1" in
     run)
         run
         ;;
+    logs)
+        logs
+        ;;
     *)
         echo "USAGE: $0 {build|start|stop|run}"
         echo "build: build the maven project and build the docker image"
         echo "start: start the docker containers"
         echo "stop: stop the docker containers"
         echo "run: build and start"
+        echo "logs: shows output from docker containers"
 esac
