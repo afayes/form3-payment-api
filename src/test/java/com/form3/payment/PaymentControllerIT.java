@@ -191,6 +191,20 @@ PaymentControllerIT {
         } );
     }
 
+    @Test
+    public void test_get_payments_when_no_payment_exist_returns_200_with_empty_list() {
+        ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>> parameterizedTypeReference = new ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>>() {
+        };
+
+        ResponseEntity<List<PaymentResourceResponseWithLinksAsList>> response = template.exchange(baseUrl, HttpMethod.GET, null, parameterizedTypeReference);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        List<PaymentResourceResponseWithLinksAsList> paymentResources = response.getBody();
+        assertThat(paymentResources.size()).isEqualTo(0);
+    }
+
+
     /**
      * NOTE: after adding SWAGGER to the POM, single resource HATEOAS response come back in the form represented by this class.
      */
