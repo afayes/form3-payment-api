@@ -1,4 +1,4 @@
-package com.form3.payment;
+package com.form3.payment.rest;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;

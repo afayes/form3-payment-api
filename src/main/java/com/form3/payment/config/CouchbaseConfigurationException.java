@@ -1,4 +1,4 @@
-package com.form3.payment;
+package com.form3.payment.config;
 
 /**
  * todo add comments.

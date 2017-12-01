@@ -1,4 +1,4 @@
-package com.form3.payment;
+package com.form3.payment.rest;
 
 import com.form3.payment.model.Payment;
 import org.springframework.hateoas.Link;

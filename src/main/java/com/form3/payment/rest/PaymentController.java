@@ -1,6 +1,6 @@
-package com.form3.payment;
+package com.form3.payment.rest;
 
-import static com.form3.payment.PaymentController.MEDIA_TYPE_HAL_JSON_VALUE;
+import static com.form3.payment.rest.PaymentController.MEDIA_TYPE_HAL_JSON_VALUE;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import com.form3.payment.Application;
+import com.form3.payment.service.PaymentService;
 import com.form3.payment.model.Payment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

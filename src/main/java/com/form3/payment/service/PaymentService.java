@@ -2,7 +2,7 @@
  * All rights reserved. Copyright (c) Ixxus Ltd 2017
  */
 
-package com.form3.payment;
+package com.form3.payment.service;
 
 import java.util.List;
 import java.util.Optional;

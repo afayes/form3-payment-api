@@ -1,10 +1,11 @@
-package com.form3.payment;
+package com.form3.payment.config;
 
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.form3.payment.service.CouchbaseHealthCheckService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
