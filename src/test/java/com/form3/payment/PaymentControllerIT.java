@@ -92,6 +92,26 @@ PaymentControllerIT {
     }
 
     @Test
+    public void test_save_payment_after_updating_payment_returns_200_with_updated_payment_resource() {
+        Payment paymentToCreate = TestUtils.getSamplePayment();
+
+        ResponseEntity<Payment> paymentCreatedResponse = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), Payment.class,
+                paymentToCreate.getId());
+
+        Payment paymentToUpdate = paymentCreatedResponse.getBody();
+        paymentToUpdate.setType("custom type");
+        paymentToUpdate.setVersion(2);
+
+        ResponseEntity<PaymentResourceResponseWithLinksAsMap> paymentUpdatedResponse = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToUpdate),
+                PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
+
+        assertThat(paymentUpdatedResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        PaymentResourceResponseWithLinksAsMap paymentUpdatedResource = paymentUpdatedResponse.getBody();
+        assertThat(paymentUpdatedResource).isEqualToIgnoringGivenFields(paymentToUpdate, PROPERTY_LINKS_WITH_UDNERSCORE);
+        assertThat(paymentUpdatedResource._links).isEqualTo(getPaymentResourceLinksAsMap(paymentToUpdate.getId()));
+    }
+
+    @Test
     public void test_get_payment_when_payment_exists_returns_200_with_payment_resource() {
         Payment paymentToCreate = TestUtils.getSamplePayment();
 
