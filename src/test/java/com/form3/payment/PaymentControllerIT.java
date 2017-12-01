@@ -54,13 +54,13 @@ PaymentControllerIT {
     public void setUp() throws Exception {
         template = new TestRestTemplate();
         baseUrl = "http://localhost:" + port + Application.VERSION + PaymentController.URL;
-        // clean out the database
+        // clean out the database so we have a clean state on each test run
         paymentRepository.deleteAll();
     }
 
     @Test
     public void test_save_payment_when_payment_does_not_exist_returns_201_with_payment_resource() {
-        Payment paymentToCreate = new Payment();
+        Payment paymentToCreate = TestUtils.getSamplePayment();
         paymentToCreate.setId(UUID.randomUUID());
 
         ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate),
@@ -76,7 +76,7 @@ PaymentControllerIT {
 
     @Test
     public void test_save_payment_when_payment_exists_returns_200_with_payment_resource() {
-        Payment paymentToCreate = new Payment();
+        Payment paymentToCreate = TestUtils.getSamplePayment();
         paymentToCreate.setId(UUID.randomUUID());
 
         template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
@@ -93,7 +93,7 @@ PaymentControllerIT {
 
     @Test
     public void test_get_payment_when_payment_exists_returns_200_with_payment_resource() {
-        Payment paymentToCreate = new Payment();
+        Payment paymentToCreate = TestUtils.getSamplePayment();
         paymentToCreate.setId(UUID.randomUUID());
 
         template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
@@ -118,7 +118,7 @@ PaymentControllerIT {
 
     @Test
     public void test_delete_payment_when_payment_exists_returns_204() {
-        Payment paymentToCreate = new Payment();
+        Payment paymentToCreate = TestUtils.getSamplePayment();
         paymentToCreate.setId(UUID.randomUUID());
 
         template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
@@ -139,7 +139,7 @@ PaymentControllerIT {
 
     @Test
     public void test_get_payments_when_one_payment_exists_returns_200_with_payment_resource() {
-        Payment paymentToCreate = new Payment();
+        Payment paymentToCreate = TestUtils.getSamplePayment();
         paymentToCreate.setId(UUID.randomUUID());
 
         template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
@@ -162,13 +162,7 @@ PaymentControllerIT {
 
     @Test
     public void test_get_payments_when_multiple_payment_exists_returns_200_with_payment_resources() {
-        final Payment paymentToCreate = new Payment();
-        paymentToCreate.setId(UUID.randomUUID());
-
-        final Payment paymentToCreate2 = new Payment();
-        paymentToCreate2.setId(UUID.randomUUID());
-
-        List<Payment> paymentsToCreate = Arrays.asList(paymentToCreate, paymentToCreate2);
+        List<Payment> paymentsToCreate = TestUtils.getSamplePayments();
 
         paymentsToCreate.stream().forEach(payment -> {
             template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(payment), PaymentResourceResponseWithLinksAsMap.class,
@@ -207,7 +201,8 @@ PaymentControllerIT {
 
 
     /**
-     * NOTE: after adding SWAGGER to the POM, single resource HATEOAS response come back in the form represented by this class.
+     * NOTE: Single resource HATEOAS response come back in the form represented by this class. The response format for links changed after adding SWAGGER to the POM, not sure why.
+     * See {@link PaymentResourceResponseWithLinksAsList} for the original format.
      */
     private static class PaymentResourceResponseWithLinksAsMap extends Payment {
         private Map<String, Map<String, String>> _links;
