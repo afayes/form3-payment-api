@@ -12,7 +12,7 @@ import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Service;
 
 /**
- * todo add comments.
+ * A service thats constructs a {@link com.form3.payment.rest.PaymentResource}.
  */
 @Service
 public class PaymentResourceAssembler extends ResourceAssemblerSupport<Payment, PaymentResource> {

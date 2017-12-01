@@ -11,7 +11,7 @@ import java.util.UUID;
 import com.form3.payment.model.Payment;
 
 /**
- * todo add comments.
+ * A service for managing payments.
  */
 public interface PaymentService {
 

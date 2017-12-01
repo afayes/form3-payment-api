@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * todo add comments.
+ * Payment controller providing a REST endpoint for payment.
  */
 @RestController
 @RequestMapping(value = Application.VERSION + PaymentController.URL, produces = MEDIA_TYPE_HAL_JSON_VALUE)
@@ -39,6 +39,13 @@ public class PaymentController {
     @Inject
     private PaymentResourceAssembler paymentResourceAssembler;
 
+    /**
+     * Save payment.
+     *
+     * @param paymentId
+     * @param payment
+     * @return
+     */
     @RequestMapping(method = RequestMethod.PUT, value = URL_PAYMENT_RESOURCE)
     @ResponseBody
     public ResponseEntity<PaymentResource> savePayment(@PathVariable("paymentId") final UUID paymentId, @RequestBody final Payment payment) {
@@ -52,6 +59,12 @@ public class PaymentController {
         return ResponseEntity.status(status).body(paymentResource);
     }
 
+    /**
+     * Get payment.
+     *
+     * @param paymentId
+     * @return
+     */
     @RequestMapping(value = URL_PAYMENT_RESOURCE)
     @ResponseBody
     public ResponseEntity<PaymentResource> getPayment(@PathVariable("paymentId") final UUID paymentId) {
@@ -64,6 +77,12 @@ public class PaymentController {
         }
     }
 
+    /**
+     * Delete payment.
+     *
+     * @param paymentId
+     * @return
+     */
     @RequestMapping(method = RequestMethod.DELETE, path = URL_PAYMENT_RESOURCE)
     @ResponseBody
     public ResponseEntity<PaymentResource> deletePayment(@PathVariable("paymentId") final UUID paymentId) {
@@ -71,6 +90,11 @@ public class PaymentController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Get payments.
+     *
+     * @return
+     */
     @RequestMapping()
     @ResponseBody
     public ResponseEntity<List<PaymentResource>> getPayments() {

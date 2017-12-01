@@ -10,7 +10,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * todo add comments.
+ * A service that allows you to check the health status of Couchbase buckets.
  */
 @Service
 public class CouchbaseHealthCheckService {

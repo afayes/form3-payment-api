@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 
 /**
- * todo add comments.
+ * A Spring Data based repository for payments that uses Couchbase as the underlying datastore.
  */
 @ViewIndexed(designDoc = "payment")
 @N1qlPrimaryIndexed

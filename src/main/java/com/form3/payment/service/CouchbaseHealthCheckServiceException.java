@@ -1,7 +1,7 @@
 package com.form3.payment.service;
 
 /**
- * todo add comments.
+ * An exception thrown when there is an error in {@link com.form3.payment.service.CouchbaseHealthCheckService}.
  */
 public class CouchbaseHealthCheckServiceException extends RuntimeException {
 

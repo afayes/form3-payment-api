@@ -5,7 +5,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 
 /**
- * todo add comments.
+ * HATEOAS Payment resource wrapping a {@link com.form3.payment.model.Payment}.
  */
 public class PaymentResource extends Resource<Payment> {
 
