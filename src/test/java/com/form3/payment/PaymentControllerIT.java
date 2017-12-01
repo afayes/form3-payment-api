@@ -1,7 +1,7 @@
 package com.form3.payment;
 
-import static com.form3.payment.PaymentResourceAssembler.REL_DELETE;
-import static com.form3.payment.PaymentResourceAssembler.REL_SAVE;
+import static com.form3.payment.rest.PaymentResourceAssembler.REL_DELETE;
+import static com.form3.payment.rest.PaymentResourceAssembler.REL_SAVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -14,6 +14,8 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import com.form3.payment.model.Payment;
+import com.form3.payment.rest.PaymentController;
+import com.form3.payment.service.PaymentRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,7 +63,6 @@ PaymentControllerIT {
     @Test
     public void test_save_payment_when_payment_does_not_exist_returns_201_with_payment_resource() {
         Payment paymentToCreate = TestUtils.getSamplePayment();
-        paymentToCreate.setId(UUID.randomUUID());
 
         ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate),
                 PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
@@ -77,7 +78,6 @@ PaymentControllerIT {
     @Test
     public void test_save_payment_when_payment_exists_returns_200_with_payment_resource() {
         Payment paymentToCreate = TestUtils.getSamplePayment();
-        paymentToCreate.setId(UUID.randomUUID());
 
         template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
                 paymentToCreate.getId());
@@ -94,7 +94,6 @@ PaymentControllerIT {
     @Test
     public void test_get_payment_when_payment_exists_returns_200_with_payment_resource() {
         Payment paymentToCreate = TestUtils.getSamplePayment();
-        paymentToCreate.setId(UUID.randomUUID());
 
         template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
                 paymentToCreate.getId());
@@ -119,7 +118,6 @@ PaymentControllerIT {
     @Test
     public void test_delete_payment_when_payment_exists_returns_204() {
         Payment paymentToCreate = TestUtils.getSamplePayment();
-        paymentToCreate.setId(UUID.randomUUID());
 
         template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
                 paymentToCreate.getId());
@@ -140,7 +138,6 @@ PaymentControllerIT {
     @Test
     public void test_get_payments_when_one_payment_exists_returns_200_with_payment_resource() {
         Payment paymentToCreate = TestUtils.getSamplePayment();
-        paymentToCreate.setId(UUID.randomUUID());
 
         template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
                 paymentToCreate.getId());
