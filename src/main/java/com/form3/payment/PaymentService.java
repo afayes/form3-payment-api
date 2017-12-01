@@ -4,6 +4,7 @@
 
 package com.form3.payment;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,4 +26,6 @@ public interface PaymentService {
     Optional<Payment> getPayment(final UUID paymentId);
 
     void deletePayment(final UUID paymentId);
+
+    List<Payment> getPayments();
 }

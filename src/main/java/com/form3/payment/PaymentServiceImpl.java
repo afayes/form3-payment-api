@@ -1,8 +1,10 @@
 package com.form3.payment;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,5 +35,11 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public void deletePayment(final UUID paymentId) {
         paymentRepository.delete(paymentId);
+    }
+
+    @Override
+    public List<Payment> getPayments() {
+        Iterable<Payment> payments = paymentRepository.findAll();
+        return Lists.newArrayList(payments);
     }
 }

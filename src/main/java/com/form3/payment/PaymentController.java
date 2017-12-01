@@ -2,6 +2,7 @@ package com.form3.payment;
 
 import static com.form3.payment.PaymentController.MEDIA_TYPE_HAL_JSON_VALUE;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -65,5 +66,13 @@ public class PaymentController {
     public ResponseEntity<PaymentResource> deletePayment(@PathVariable("paymentId") final UUID paymentId) {
         paymentService.deletePayment(paymentId);
         return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping()
+    @ResponseBody
+    public ResponseEntity<List<PaymentResource>> getPayments() {
+        List<Payment> payments = paymentService.getPayments();
+        List<PaymentResource> paymentResources = paymentResourceAssembler.toResources(payments);
+        return ResponseEntity.ok().body(paymentResources);
     }
 }
