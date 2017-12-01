@@ -65,7 +65,7 @@ public class PaymentController {
      * @param paymentId
      * @return
      */
-    @RequestMapping(value = URL_PAYMENT_RESOURCE)
+    @RequestMapping(method = RequestMethod.GET, value = URL_PAYMENT_RESOURCE)
     @ResponseBody
     public ResponseEntity<PaymentResource> getPayment(@PathVariable("paymentId") final UUID paymentId) {
         Optional<Payment> payment = paymentService.getPayment(paymentId);
@@ -95,7 +95,7 @@ public class PaymentController {
      *
      * @return
      */
-    @RequestMapping()
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<List<PaymentResource>> getPayments() {
         List<Payment> payments = paymentService.getPayments();
