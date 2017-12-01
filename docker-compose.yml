@@ -3,6 +3,8 @@ services:
   couchbase-server:
     image: afayes/couchbase-server
     container_name: couchbase-server
+    volumes:
+      - "./docker-data/couchbase:/opt/couchbase/var"
     ports:
       - "8091:8091"
       - "8092:8092"
