@@ -27,7 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment=RANDOM_PORT )
+@SpringBootTest(webEnvironment = RANDOM_PORT)
 public class
 PaymentControllerIT {
 
@@ -39,10 +39,10 @@ PaymentControllerIT {
 
     private TestRestTemplate template;
 
-	@Value("${local.server.port}")
-	private int port;
+    @Value("${local.server.port}")
+    private int port;
 
-	private String baseUrl;
+    private String baseUrl;
 
     private static final String REL_SELF = "self";
 
@@ -50,38 +50,39 @@ PaymentControllerIT {
     private PaymentRepository paymentRepository;
 
     @Before
-	public void setUp() throws Exception {
-		template = new TestRestTemplate();
-		baseUrl = "http://localhost:" + port + Application.VERSION + PaymentController.URL;
-		// clean out the database
+    public void setUp() throws Exception {
+        template = new TestRestTemplate();
+        baseUrl = "http://localhost:" + port + Application.VERSION + PaymentController.URL;
+        // clean out the database
         paymentRepository.deleteAll();
-	}
+    }
 
-	@Test
-	public void test_save_payment_when_payment_does_not_exist_returns_201_with_payment_resource() {
-		Payment paymentToCreate = new Payment();
-		paymentToCreate.setId(UUID.randomUUID());
+    @Test
+    public void test_save_payment_when_payment_does_not_exist_returns_201_with_payment_resource() {
+        Payment paymentToCreate = new Payment();
+        paymentToCreate.setId(UUID.randomUUID());
 
         ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate),
                 PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
 
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         PaymentResourceResponseWithLinksAsMap paymentResourceResponseWithLinksAsMap = response.getBody();
         assertThat(paymentResourceResponseWithLinksAsMap).isEqualToIgnoringGivenFields(paymentToCreate, PROPERTY_LINKS_WITH_UDNERSCORE);
 
         assertThat(paymentResourceResponseWithLinksAsMap._links).isEqualTo(getPaymentResourceLinksAsMap(paymentToCreate.getId()));
 
-	}
+    }
 
     @Test
     public void test_save_payment_when_payment_exists_returns_200_with_payment_resource() {
         Payment paymentToCreate = new Payment();
         paymentToCreate.setId(UUID.randomUUID());
 
-        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
+        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
+                paymentToCreate.getId());
 
         ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate),
-				PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
+                PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         PaymentResourceResponseWithLinksAsMap paymentResourceResponseWithLinksAsMap = response.getBody();
@@ -94,9 +95,11 @@ PaymentControllerIT {
         Payment paymentToCreate = new Payment();
         paymentToCreate.setId(UUID.randomUUID());
 
-        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
+        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
+                paymentToCreate.getId());
 
-        ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = template.getForEntity(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
+        ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = template
+                .getForEntity(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         PaymentResourceResponseWithLinksAsMap paymentResourceResponseWithLinksAsMap = response.getBody();
@@ -107,7 +110,8 @@ PaymentControllerIT {
     @Test
     public void test_get_payment_when_payment_does_not_exist_returns_404() {
         UUID nonExistentPaymentId = UUID.randomUUID();
-        ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = template.getForEntity(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, PaymentResourceResponseWithLinksAsMap.class, nonExistentPaymentId);
+        ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = template
+                .getForEntity(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, PaymentResourceResponseWithLinksAsMap.class, nonExistentPaymentId);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
@@ -116,7 +120,8 @@ PaymentControllerIT {
         Payment paymentToCreate = new Payment();
         paymentToCreate.setId(UUID.randomUUID());
 
-        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
+        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
+                paymentToCreate.getId());
 
         ResponseEntity<?> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.DELETE, null, Object.class, paymentToCreate.getId());
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
@@ -136,9 +141,11 @@ PaymentControllerIT {
         Payment paymentToCreate = new Payment();
         paymentToCreate.setId(UUID.randomUUID());
 
-        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
+        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
+                paymentToCreate.getId());
 
-        ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>> parameterizedTypeReference = new ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>>(){};
+        ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>> parameterizedTypeReference = new ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>>() {
+        };
 
         ResponseEntity<List<PaymentResourceResponseWithLinksAsList>> response = template.exchange(baseUrl, HttpMethod.GET, null, parameterizedTypeReference);
 
@@ -152,11 +159,43 @@ PaymentControllerIT {
         assertThat(paymentResourceRetrieved.links).isEqualTo(getPaymentResourceLinksAsList(paymentToCreate.getId()));
     }
 
+    @Test
+    public void test_get_payments_when_multiple_payment_exists_returns_200_with_payment_resources() {
+        final Payment paymentToCreate = new Payment();
+        paymentToCreate.setId(UUID.randomUUID());
+
+        final Payment paymentToCreate2 = new Payment();
+        paymentToCreate2.setId(UUID.randomUUID());
+
+        List<Payment> paymentsToCreate = Arrays.asList(paymentToCreate, paymentToCreate2);
+
+        paymentsToCreate.stream().forEach(payment -> {
+            template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(payment), PaymentResourceResponseWithLinksAsMap.class,
+                    payment.getId());
+        });
+
+        ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>> parameterizedTypeReference = new ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>>() {
+        };
+
+        ResponseEntity<List<PaymentResourceResponseWithLinksAsList>> response = template.exchange(baseUrl, HttpMethod.GET, null, parameterizedTypeReference);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        List<PaymentResourceResponseWithLinksAsList> paymentResources = response.getBody();
+        assertThat(paymentResources.size()).isEqualTo(paymentsToCreate.size());
+
+        paymentsToCreate.stream().forEach(expectedPayment -> {
+            PaymentResourceResponseWithLinksAsList paymentResourceRetrieved = paymentResources.stream().filter(resource -> resource.getId().equals(expectedPayment.getId())).findFirst().get();
+            assertThat(paymentResourceRetrieved).isEqualToIgnoringGivenFields(expectedPayment, PROPERTY_LINKS);
+            assertThat(paymentResourceRetrieved.links).isEqualTo(getPaymentResourceLinksAsList(expectedPayment.getId()));
+        } );
+    }
+
     /**
      * NOTE: after adding SWAGGER to the POM, single resource HATEOAS response come back in the form represented by this class.
      */
     private static class PaymentResourceResponseWithLinksAsMap extends Payment {
-	    private Map<String, Map<String, String>> _links;
+        private Map<String, Map<String, String>> _links;
 
         public Map<String, Map<String, String>> get_links() {
             return _links;
