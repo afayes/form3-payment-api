@@ -12,6 +12,9 @@ import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
 import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
 import org.springframework.data.couchbase.repository.support.IndexManager;
 
+/**
+ * Couchbase configuration class.
+ */
 @Configuration
 @EnableCouchbaseRepositories(basePackages = "com.form3.payment")
 public class CouchbaseConfiguration extends AbstractCouchbaseConfiguration {
