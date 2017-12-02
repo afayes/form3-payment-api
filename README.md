@@ -33,7 +33,7 @@ A Maven plugin has been used to start the Couchbase Docker container before the 
 ## Some Implementation Details
 When the Spring Context is starting, Spring Data Couchbase requires that Couchbase is running and ready and has a bucket pre configured for connection. For the purposes of this project, I created a custom image
 for Couchbase Docker. I modified an existing Dockerfile by bootstrapping a _payment_ bucket. See [here](resources/couchbase-server-docker) for more details. I also created a 
-(service)[src/main/java/com/form3/payment/service/CouchbaseHealthCheckService.java] that uses REST calls to check that the Couchbase bucket is ready for connection before Spring connects to it.
+[service](src/main/java/com/form3/payment/service/CouchbaseHealthCheckService.java) that uses REST calls to check that the Couchbase bucket is ready for connection before Spring connects to it.
 
 ## Useful Commands
 A [run.sh](run.sh) Bash script has been written to provide useful commands for the project. It is executed in the following way:
