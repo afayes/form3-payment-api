@@ -29,7 +29,7 @@ You can run all unit and integration tests by executing
 mvn clean verify
 ```
 A Maven plugin has been used to start the Couchbase Docker container before the integration tests are run and also for stopping the container after the tests have finished, have a look at [pom.xml](pom.xml). I have customised an
-existing Couchbase Docker container for the purposes of the project. It extends the base container by finding an open port and bootstrapping a _payment_ bucket with the port. See [here](resources/couchbase-server) for more details.
+existing Couchbase Docker container for the purposes of the project. It extends the base container by finding an open port and bootstrapping a _payment_ bucket with the port. See [here](resources/couchbase-server-docker) for more details.
 
 ## Useful Commands
 A [run.sh](run.sh) Bash script has been written to provide useful commands for the project. It is executed in the following way:
