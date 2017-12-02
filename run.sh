@@ -8,7 +8,7 @@ build() {
 }
 
 start() {
-    docker-compose up -d
+    docker-compose up
 }
 stop() {
     docker-compose down
