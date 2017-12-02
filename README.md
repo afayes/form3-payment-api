@@ -21,7 +21,7 @@ To build and run the project execute
 navigate to ```http://localhost:8080/swagger-ui.html``` on your browser to use the API through Swagger
 
 ## Design
-The PDF document of the original design with REST API and class diagram is available [here](design.pdf){:target="_blank"}
+The PDF document of the original design with REST API and class diagram is available [here](design.pdf)
 
 ## Tests
 You can run all unit and integration tests by executing
