@@ -4,6 +4,11 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import com.form3.payment.TestUtils;
 import com.form3.payment.model.Payment;
 import com.form3.payment.service.PaymentService;
@@ -64,5 +69,52 @@ public class PaymentControllerTest {
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(expectedHttpStatusResponse);
         assertThat(responseEntity.getBody()).isSameAs(paymentResource);
+    }
+
+    @Test
+    public void test_get_payment_when_payment_exists_returns_200_with_payment_resource() {
+        Payment payment = TestUtils.getSamplePayment();
+        Optional<Payment> paymentOp = Optional.of(payment);
+
+        when(paymentService.getPayment(payment.getId())).thenReturn(paymentOp);
+
+        PaymentResource paymentResource = mock(PaymentResource.class);
+        when(paymentResourceAssembler.toResource(payment)).thenReturn(paymentResource);
+
+        ResponseEntity<PaymentResource> response = paymentController.getPayment(payment.getId());
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(paymentResource);
+    }
+
+    @Test
+    public void test_get_payment_when_payment_does_not_exist_returns_404() {
+        UUID paymentId = UUID.randomUUID();
+        Optional<Payment> paymentOp = Optional.ofNullable(null);
+        when(paymentService.getPayment(paymentId)).thenReturn(paymentOp);
+
+        ResponseEntity<PaymentResource> response = paymentController.getPayment(paymentId);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void test_delete_payment_returns_204() {
+        UUID paymentId = UUID.randomUUID();
+        ResponseEntity<PaymentResource> paymentResourceResponseEntity = paymentController.deletePayment(paymentId);
+
+        assertThat(paymentResourceResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    @Test
+    public void test_get_payments_returns_200_with_payments_resources() {
+        List<Payment> payments = Arrays.asList(TestUtils.getSamplePayment());
+        when(paymentService.getPayments()).thenReturn(payments);
+        List<PaymentResource> paymentResources = Arrays.asList(mock(PaymentResource.class));
+        when(paymentResourceAssembler.toResources(payments)).thenReturn(paymentResources);
+
+        ResponseEntity<List<PaymentResource>> response = paymentController.getPayments();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(paymentResources);
     }
 }
