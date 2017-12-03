@@ -1,4 +1,4 @@
-package com.form3.payment;
+package com.form3.payment.rest;
 
 import static com.form3.payment.rest.PaymentResourceAssembler.REL_DELETE;
 import static com.form3.payment.rest.PaymentResourceAssembler.REL_SAVE;
@@ -13,8 +13,9 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import com.form3.payment.Application;
+import com.form3.payment.TestUtils;
 import com.form3.payment.model.Payment;
-import com.form3.payment.rest.PaymentController;
 import com.form3.payment.service.PaymentRepository;
 import org.junit.Before;
 import org.junit.Test;
