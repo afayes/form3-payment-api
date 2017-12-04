@@ -18,7 +18,7 @@ To build and run the project execute
 ./run.sh run
 ```
 
-navigate to ```http://localhost:8080/swagger-ui.html``` on your browser to use the API through Swagger. 
+navigate to http://localhost:8080/swagger-ui.html on your browser to use the API through Swagger. 
 You can also login to the Couchbase web client at: http://localhost:8091 using username 'Administrator' and password 'password'.
 
 ## Design
