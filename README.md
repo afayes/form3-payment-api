@@ -58,4 +58,5 @@ within your IDE and not just Maven. I tried this approach initially using a Java
 - Bootstrap Couchbase bucket from within the application code, that way the docker container is decoupled from the application's data requirements
 - Add more unit tests/integration tests for classes other than the PaymentController
 - Based on the original design, implement the root controller which returns the root HATEOAS links. Would need more time to implement this.
+- Add logging
 
