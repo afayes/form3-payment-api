@@ -64,75 +64,47 @@ PaymentControllerIT {
     @Test
     public void test_save_payment_when_payment_does_not_exist_returns_201_with_payment_resource() {
         Payment paymentToCreate = TestUtils.getSamplePayment();
-
-        ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate),
-                PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        PaymentResourceResponseWithLinksAsMap paymentResourceResponseWithLinksAsMap = response.getBody();
-        assertThat(paymentResourceResponseWithLinksAsMap).isEqualToIgnoringGivenFields(paymentToCreate, PROPERTY_LINKS_WITH_UDNERSCORE);
-
-        assertThat(paymentResourceResponseWithLinksAsMap._links).isEqualTo(getPaymentResourceLinksAsMap(paymentToCreate.getId()));
+        ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = savePaymentUsingRest(paymentToCreate);
+        assertThatResponseMatchesStatusAndPayment(response, paymentToCreate, HttpStatus.CREATED);
 
     }
 
     @Test
     public void test_save_payment_when_payment_exists_returns_200_with_payment_resource() {
         Payment paymentToCreate = TestUtils.getSamplePayment();
+        savePaymentUsingRest(paymentToCreate);
+        ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = savePaymentUsingRest(paymentToCreate);
+        assertThatResponseMatchesStatusAndPayment(response, paymentToCreate, HttpStatus.OK);
 
-        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
-                paymentToCreate.getId());
-
-        ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate),
-                PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        PaymentResourceResponseWithLinksAsMap paymentResourceResponseWithLinksAsMap = response.getBody();
-        assertThat(paymentResourceResponseWithLinksAsMap).isEqualToIgnoringGivenFields(paymentToCreate, PROPERTY_LINKS_WITH_UDNERSCORE);
-        assertThat(paymentResourceResponseWithLinksAsMap._links).isEqualTo(getPaymentResourceLinksAsMap(paymentToCreate.getId()));
     }
 
     @Test
     public void test_save_payment_after_updating_payment_returns_200_with_updated_payment_resource() {
         Payment paymentToCreate = TestUtils.getSamplePayment();
 
-        ResponseEntity<Payment> paymentCreatedResponse = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), Payment.class,
-                paymentToCreate.getId());
+        ResponseEntity<? extends Payment> paymentCreatedResponse = savePaymentUsingRest(paymentToCreate);
 
         Payment paymentToUpdate = paymentCreatedResponse.getBody();
         paymentToUpdate.setType("custom type");
         paymentToUpdate.setVersion(2);
 
-        ResponseEntity<PaymentResourceResponseWithLinksAsMap> paymentUpdatedResponse = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToUpdate),
-                PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
+        ResponseEntity<PaymentResourceResponseWithLinksAsMap> paymentUpdatedResponse = savePaymentUsingRest(paymentToUpdate);
 
-        assertThat(paymentUpdatedResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
-        PaymentResourceResponseWithLinksAsMap paymentUpdatedResource = paymentUpdatedResponse.getBody();
-        assertThat(paymentUpdatedResource).isEqualToIgnoringGivenFields(paymentToUpdate, PROPERTY_LINKS_WITH_UDNERSCORE);
-        assertThat(paymentUpdatedResource._links).isEqualTo(getPaymentResourceLinksAsMap(paymentToUpdate.getId()));
+        assertThatResponseMatchesStatusAndPayment(paymentUpdatedResponse, paymentToUpdate, HttpStatus.OK);
     }
 
     @Test
     public void test_get_payment_when_payment_exists_returns_200_with_payment_resource() {
         Payment paymentToCreate = TestUtils.getSamplePayment();
-
-        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
-                paymentToCreate.getId());
-
-        ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = template
-                .getForEntity(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, PaymentResourceResponseWithLinksAsMap.class, paymentToCreate.getId());
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        PaymentResourceResponseWithLinksAsMap paymentResourceResponseWithLinksAsMap = response.getBody();
-        assertThat(paymentResourceResponseWithLinksAsMap).isEqualToIgnoringGivenFields(paymentToCreate, PROPERTY_LINKS_WITH_UDNERSCORE);
-        assertThat(paymentResourceResponseWithLinksAsMap._links).isEqualTo(getPaymentResourceLinksAsMap(paymentToCreate.getId()));
+        savePaymentUsingRest(paymentToCreate);
+        ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = getPaymentUsingRest(paymentToCreate.getId());
+        assertThatResponseMatchesStatusAndPayment(response, paymentToCreate, HttpStatus.OK);
     }
 
     @Test
     public void test_get_payment_when_payment_does_not_exist_returns_404() {
         UUID nonExistentPaymentId = UUID.randomUUID();
-        ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = template
-                .getForEntity(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, PaymentResourceResponseWithLinksAsMap.class, nonExistentPaymentId);
+        ResponseEntity<PaymentResourceResponseWithLinksAsMap> response = getPaymentUsingRest(nonExistentPaymentId);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
@@ -140,18 +112,17 @@ PaymentControllerIT {
     public void test_delete_payment_when_payment_exists_returns_204() {
         Payment paymentToCreate = TestUtils.getSamplePayment();
 
-        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
-                paymentToCreate.getId());
+        savePaymentUsingRest(paymentToCreate);
 
-        ResponseEntity<?> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.DELETE, null, Object.class, paymentToCreate.getId());
+        ResponseEntity<?> response = deletePaymentUsingRest(paymentToCreate.getId());
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         assertThat(response.getBody()).isNull();
     }
 
     @Test
     public void test_delete_payment_when_payment_does_not_exist_returns_204() {
-        UUID nonExistentPaymetId = UUID.randomUUID();
-        ResponseEntity<?> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.DELETE, null, Object.class, nonExistentPaymetId);
+        UUID nonExistentPaymentId = UUID.randomUUID();
+        ResponseEntity<?> response = template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.DELETE, null, Object.class, nonExistentPaymentId);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         assertThat(response.getBody()).isNull();
     }
@@ -160,13 +131,9 @@ PaymentControllerIT {
     public void test_get_payments_when_one_payment_exists_returns_200_with_payment_resource() {
         Payment paymentToCreate = TestUtils.getSamplePayment();
 
-        template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToCreate), PaymentResourceResponseWithLinksAsMap.class,
-                paymentToCreate.getId());
+        savePaymentUsingRest(paymentToCreate);
 
-        ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>> parameterizedTypeReference = new ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>>() {
-        };
-
-        ResponseEntity<List<PaymentResourceResponseWithLinksAsList>> response = template.exchange(baseUrl, HttpMethod.GET, null, parameterizedTypeReference);
+        ResponseEntity<List<PaymentResourceResponseWithLinksAsList>> response = getPaymentsUsingRest();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
@@ -182,15 +149,9 @@ PaymentControllerIT {
     public void test_get_payments_when_multiple_payment_exists_returns_200_with_payment_resources() {
         List<Payment> paymentsToCreate = TestUtils.getSamplePayments();
 
-        paymentsToCreate.stream().forEach(payment -> {
-            template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(payment), PaymentResourceResponseWithLinksAsMap.class,
-                    payment.getId());
-        });
+        paymentsToCreate.stream().forEach(this::savePaymentUsingRest);
 
-        ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>> parameterizedTypeReference = new ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>>() {
-        };
-
-        ResponseEntity<List<PaymentResourceResponseWithLinksAsList>> response = template.exchange(baseUrl, HttpMethod.GET, null, parameterizedTypeReference);
+        ResponseEntity<List<PaymentResourceResponseWithLinksAsList>> response = getPaymentsUsingRest();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
@@ -206,16 +167,43 @@ PaymentControllerIT {
 
     @Test
     public void test_get_payments_when_no_payment_exist_returns_200_with_empty_list() {
-        ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>> parameterizedTypeReference = new ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>>() {
-        };
-
-        ResponseEntity<List<PaymentResourceResponseWithLinksAsList>> response = template.exchange(baseUrl, HttpMethod.GET, null, parameterizedTypeReference);
+        ResponseEntity<List<PaymentResourceResponseWithLinksAsList>> response = getPaymentsUsingRest();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         List<PaymentResourceResponseWithLinksAsList> paymentResources = response.getBody();
         assertThat(paymentResources.size()).isEqualTo(0);
     }
+
+    private ResponseEntity<PaymentResourceResponseWithLinksAsMap> savePaymentUsingRest(final Payment paymentToSave) {
+        return template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.PUT, new HttpEntity<Payment>(paymentToSave),
+                PaymentResourceResponseWithLinksAsMap.class, paymentToSave.getId());
+    }
+
+    ResponseEntity<Object> deletePaymentUsingRest(final UUID paymentId) {
+        return template.exchange(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, HttpMethod.DELETE, null, Object.class, paymentId);
+    }
+
+    ResponseEntity<PaymentResourceResponseWithLinksAsMap> getPaymentUsingRest(final UUID paymentId) {
+        return template.getForEntity(baseUrl + PaymentController.URL_PAYMENT_RESOURCE, PaymentResourceResponseWithLinksAsMap.class, paymentId);
+    }
+
+    ResponseEntity<List<PaymentResourceResponseWithLinksAsList>> getPaymentsUsingRest() {
+        ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>> parameterizedTypeReference = new ParameterizedTypeReference<List<PaymentResourceResponseWithLinksAsList>>() {
+        };
+
+        return template.exchange(baseUrl, HttpMethod.GET, null, parameterizedTypeReference);
+    }
+
+    private void assertThatResponseMatchesStatusAndPayment(final ResponseEntity<PaymentResourceResponseWithLinksAsMap> response, final Payment paymentToCreate, final HttpStatus expectedStatus) {
+        assertThat(response.getStatusCode()).isEqualTo(expectedStatus);
+
+        PaymentResourceResponseWithLinksAsMap paymentResourceResponseWithLinksAsMap = response.getBody();
+        assertThat(paymentResourceResponseWithLinksAsMap).isEqualToIgnoringGivenFields(paymentToCreate, PROPERTY_LINKS_WITH_UDNERSCORE);
+
+        assertThat(paymentResourceResponseWithLinksAsMap._links).isEqualTo(getPaymentResourceLinksAsMap(paymentToCreate.getId()));
+    }
+
 
 
     /**
