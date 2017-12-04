@@ -1,7 +1,7 @@
 # Form3 Payment API
 
 ## Overview
-This Form3 Payment API is built using Java 8, Spring Boot, HATEOAS, Couchbase, and Docker
+This Form3 Payment API is built using Java 8, Spring Boot, HATEOAS, Couchbase, Docker and SWAGGER. A TDD approach was followed using integration tests to drive the implementation.
 
 ## Requirements
 - Java 8+
@@ -49,4 +49,12 @@ A [run.sh](run.sh) Bash script has been written to provide useful commands for t
 - run: build and start
 
 - logs: shows log output from docker containers
+
+## TODO
+- For integration tests, bootstrap the Couchbase docker container possible using
+[TestExecutionListener](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/test/context/TestExecutionListener.html). This allows you to easily execute integration tests from 
+within your IDE and not just Maven. I tried this approach initially using a Java Docker client but took too long to try and get it working and so resorted to the simpler Maven approach.
+- Bootstrap Couchbase bucket from within the application code, that way the docker container is decoupled from the application's data requirements
+- Add more unit tests/integration tests for classes other than the PaymentController
+- Based on the original design, implement the root controller which returns the root HATEOAS links. Would need more time to implement this.
 
